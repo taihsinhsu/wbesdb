@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Submit
+{% endblock %}
+
+{% block main %}
+    <form action="/submit" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="Symbol" type="text"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Shares" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Building Shape" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Building Orientation" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Window Wall Ratio" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Shading" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Glass Type" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Wall Insulation" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Cooling Load" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Heating Load" type="number"/>
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Lighting Load" type="number"/>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+{% endblock %}

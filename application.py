@@ -101,9 +101,9 @@ def account():
         return render_template("account.html")
 
 
-@app.route("/buy", methods=["GET", "POST"])
+@app.route("/submit", methods=["GET", "POST"])
 @login_required
-def buy():
+def submit():
     """Buy shares of stock"""
 
     # User reached route via POST (as by submitting a form via POST)
@@ -176,19 +176,19 @@ def buy():
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("buy.html")
+        return render_template("submit.html")
 
 
-@app.route("/history")
+@app.route("/explore")
 @login_required
-def history():
+def explore():
     """Show history of transactions"""
 
     # Query database for user transaction history
     rows = db.execute("SELECT * FROM history WHERE user_id = :user_id",
                       user_id=session.get("user_id"))
 
-    return render_template("history.html", transactions=rows)
+    return render_template("explore.html", transactions=rows)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -239,37 +239,6 @@ def logout():
     return redirect("/")
 
 
-@app.route("/quote", methods=["GET", "POST"])
-@login_required
-def quote():
-    """Get stock quote."""
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-
-        symbol = request.form.get("symbol")
-
-        # ensure symbol not blank
-        if not symbol:
-            return apology("missing symbol", 400)
-
-        # ensure symbol is valid
-        if not lookup(symbol):
-            return apology("invalid symbol", 400)
-
-        # get stock values from lookup
-        lookup_symbol = lookup(symbol)["symbol"]
-        lookup_name = lookup(symbol)["name"]
-        lookup_price = usd(lookup(symbol)["price"])
-
-        # display stock quote in another templete
-        return render_template("/quoted.html", name=lookup_name, symbol=lookup_symbol, price=lookup_price)
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("quote.html")
-
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
@@ -318,9 +287,9 @@ def register():
         return render_template("register.html")
 
 
-@app.route("/sell", methods=["GET", "POST"])
+@app.route("/download", methods=["GET", "POST"])
 @login_required
-def sell():
+def download():
     """Sell shares of stock"""
 
     user_id = session.get("user_id")
@@ -392,7 +361,7 @@ def sell():
     # User reached route via GET (as by clicking a link or via redirect)
     else:
         rows = db.execute("SELECT symbol FROM 'index' WHERE user_id = :user_id", user_id=user_id)
-        return render_template("sell.html", symbols=rows)
+        return render_template("download.html", symbols=rows)
 
 
 def errorhandler(e):

@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Sell
+    Download
 {% endblock %}
 
 {% block main %}
-    <form action="/sell" method="post">
+    <form action="/download" method="post">
         <div class="form-group">
             <select class="form-control" name="symbol">
                 <option disabled selected value>Symbol</option>
@@ -17,6 +17,6 @@
         <div class="form-group">
             <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Shares" type="number"/>
         </div>
-        <button class="btn btn-primary" type="submit">Sell</button>
+        <button class="btn btn-primary" type="submit">Download</button>
     </form>
 {% endblock %}
