@@ -5,7 +5,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup, usd
+from helpers import apology, login_required
 
 # Configure application
 app = Flask(__name__)
@@ -20,9 +20,6 @@ def after_request(response):
     return response
 
 
-# Custom filter
-app.jinja_env.filters["usd"] = usd
-
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
@@ -30,7 +27,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 # Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///finance.db")
+db = SQL("postgres://zfqpzaclrzlqws:9664716ffbdcaf0c5ee9faced7f00e7bc1309cd8b6c8f9249fe6f58ba1681f57@ec2-54-163-233-89.compute-1.amazonaws.com:5432/dnh0t4rkjhu7r")
 
 
 @app.route("/")
@@ -64,41 +61,7 @@ def index():
         row_update = {"price": usd(lookup_price), "total": usd(total)}
         row = row.update(row_update)
 
-    return render_template("index.html", rows=rows, cash=usd(cash), total_total=usd(total_total))
-
-
-@app.route("/account", methods=["GET", "POST"])
-def account():
-    """Register user"""
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-
-        user_id = session.get("user_id")
-
-        new_password = request.form.get("new_password")
-        confirmation = request.form.get("confirmation")
-
-        # ensure password not blank
-        if not new_password:
-            return apology("missing new password", 400)
-
-        # ensure passwords match
-        elif not new_password == confirmation:
-            return apology("new passwords don't match", 400)
-
-        # hash password
-        hash = generate_password_hash(new_password, method="pbkdf2:sha256", salt_length=8)
-
-        # update new password to database
-        result = db.execute("UPDATE users SET hash = :hash WHERE id = :user_id",
-                            hash=hash, user_id=user_id)
-
-        # Redirect user to home page
-        return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("account.html")
+    return render_template("index.html", rows=rows)
 
 
 @app.route("/home", methods=["GET"])
@@ -136,45 +99,28 @@ def submit():
         except:
             return apology("invalid shares", 400)
 
-        # ensure the stock is valid
-        if not lookup(symbol):
-            return apology("invalid symbol", 400)
-
-        # get stock values from lookup
-        lookup_symbol = lookup(symbol)["symbol"]
-        lookup_name = lookup(symbol)["name"]
-        lookup_price = float(lookup(symbol)["price"])
-
         # Query database for cash user has
         rows = db.execute("SELECT * FROM users WHERE id = :id", id=user_id)
         cash = float(rows[0]["cash"])
 
-        # ensure user can afford the shares at current price
-        balance = round(cash - lookup_price * shares, 2)
-        if balance < 0:
-            return apology("can't afford", 400)
+        # update user table
+        new_cash = str(balance)
+        rows_users = db.execute(
+            "UPDATE users SET cash = :cash WHERE id = :id", id=user_id, cash=new_cash)
 
-        # proceed transaction
-        else:
+        # update history table
+        rows_history = db.execute("INSERT INTO history (user_id, symbol, name, shares, price) VALUES(:user_id, :symbol, :name, :shares, :price)",
+                                  user_id=user_id, symbol=symbol, name=name, shares=shares, price=usd(lookup_price))
 
-            # update user table
-            new_cash = str(balance)
-            rows_users = db.execute(
-                "UPDATE users SET cash = :cash WHERE id = :id", id=user_id, cash=new_cash)
-
-            # update history table
-            rows_history = db.execute("INSERT INTO history (user_id, symbol, name, shares, price) VALUES(:user_id, :symbol, :name, :shares, :price)",
-                                      user_id=user_id, symbol=lookup_symbol, name=lookup_name, shares=shares, price=usd(lookup_price))
-
-            # update index table
-            rows_index = db.execute("INSERT INTO 'index' (user_id, symbol, name, shares) VALUES(:user_id, :symbol, :name, :shares)",
-                                    user_id=user_id, symbol=lookup_symbol, name=lookup_name, shares=shares)
-            if not rows_index:
-                rows_index = db.execute(
-                    "SELECT * FROM 'index' WHERE user_id = :user_id AND name = :name", user_id=user_id, name=lookup_name)
-                shares_owned = int(rows_index[0]["shares"])
-                rows_index_new = db.execute("UPDATE 'index' SET shares = :shares WHERE user_id = :user_id",
-                                            user_id=user_id, shares=shares_owned + shares)
+        # update index table
+        rows_index = db.execute("INSERT INTO 'index' (user_id, symbol, name, shares) VALUES(:user_id, :symbol, :name, :shares)",
+                                user_id=user_id, symbol=symbol, name=name, shares=shares)
+        if not rows_index:
+            rows_index = db.execute(
+                "SELECT * FROM 'index' WHERE user_id = :user_id AND name = :name", user_id=user_id, name=lookup_name)
+            shares_owned = int(rows_index[0]["shares"])
+            rows_index_new = db.execute("UPDATE 'index' SET shares = :shares WHERE user_id = :user_id",
+                                        user_id=user_id, shares=shares_owned + shares)
 
         # successful transaction
         flash("Bought!")

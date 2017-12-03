@@ -11,52 +11,30 @@
         <div class="form-container">
             <form action="/submit" method="post">
                 <div class="form-group" style="text-align:left">
-                    <select  class="form-control form-control-sm"  name="shape">
-                        <option disabled selected value>building shape</option>
-                        <option value=Square>Square</option>
-                        <option value=Rectangle>Rectangle</option>
-                        <option value=Circle>Circle</option>
-                        <option value=U-Shape>U-Shape</option>
-                        <option value=T-Shape>T-Shape</option>
-                        <option value=Others>Others</option>
-                    </select>
+                    <lable class="col-form-label-sm">Shading</lable>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" max="180" name="orientation" placeholder="building orientation (°)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" max="100" name="WWR" placeholder="window wall ratio (%)" type="number"/>
                 </div>
                 <div class="form-group" style="text-align:left">
-                    <select  class="form-control form-control-sm"  name="orientation">
-                        <option disabled selected value>building orientation</option>
-                        <option value=N-S>N-S</option>
-                        <option value=E-W>E-W</option>
-                        <option value=NE-SW>NE-SW</option>
-                        <option value=NW-SE>NW-SE</option>
-                    </select>
+                    <lable class="col-form-label-sm">Shading</lable>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="NS-h-shading" placeholder="NS horizontal shading (m)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="WE-h-shading" placeholder="WE horizontal shading (m)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="WE-v-shading" placeholder="WE verical shading (m)" type="number"/>
                 </div>
                 <div class="form-group" style="text-align:left">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" max="100" name="WWR" placeholder="window wall ratio - %" type="number"/>
+                    <lable class="col-form-label-sm">Material</lable
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="wall-u" placeholder="wall: u-value (m2K/W)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="glass-u" placeholder="glass: u-value (m2K/W)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="glass-shgc" placeholder="glass: SHGC" type="number"/>
                 </div>
                 <div class="form-group" style="text-align:left">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="shading" placeholder="shading" type="number"/>
-                </div>
-                <div class="form-group" style="text-align:left">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="glass-u" placeholder="glass: u-value" type="number"/>
-                </div>
-                <div class="form-group" style="text-align:left">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="glass-shgc" placeholder="glass: solar heat gain coefficient" type="number"/>
-                </div>
-                <div class="form-group" style="text-align:left">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="wall-u" placeholder="wall: u-value" type="number"/>
-                </div>
-
-                <div class="form-group" style="text-align:left">
-                    <lable class="col-form-label-sm">Result</lable>
-                </div>
-                <div class="form-group" style="text-align:left">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="Cooling" placeholder="cooling load" type="number"/>
-                </div>
-                <div class="form-group" style="text-align:left">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="Heating" placeholder="heating load" type="number"/>
-                </div>
-                <div class="form-group" style="text-align:left">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="Lighting" placeholder="lighting load" type="number"/>
+                    <lable class="col-form-label-sm">Eenergy Use Intensity</lable>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="cooling" placeholder="cooling (Wh/m2)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="heating" placeholder="heating (Wh/m2)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="lighting" placeholder="lighting (Wh/m2)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="DHW" placeholder="DHW (Wh/m2)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="plugload" placeholder="plugload (Wh/m2)" type="number"/>
+                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="total" placeholder="total (Wh/m2)" type="number"/>
                 </div>
                 <button class="btn btn-outline-secondary" type="submit">Submit</button>
             </form>

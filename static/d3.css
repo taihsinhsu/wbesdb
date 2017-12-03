@@ -1,6 +1,6 @@
 /* D3 style*/
 svg {
-    font: 9px sans-serif;
+    font: 10px sans-serif;
 }
 
 .background path {
@@ -28,6 +28,7 @@ svg {
 
 .axis text {
     cursor: move;
+    stroke: #828282;
 }
 
 .axis--x path {
@@ -36,6 +37,6 @@ svg {
 
 .line {
     fill: none;
-    stroke: steelblue;
+    stroke: #ffcc00;
     stroke-width: 1.5px;
 }

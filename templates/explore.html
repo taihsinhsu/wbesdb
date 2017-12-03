@@ -6,31 +6,6 @@
 
 {% block main %}
     <svg id="svg2"></svg>
-    <div class="cover-container">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Symbol</th>
-                    <th>Shares</th>
-                    <th>Price</th>
-                    <th>Transacted</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for transaction in transactions %}
-                <tr>
-                    <td>{{transaction.symbol}}</td>
-                    <td>{{transaction.shares}}</td>
-                    <td>{{transaction.price}}</td>
-                    <td>{{transaction.transacted}}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-
-        </form>
-    </div>
-
-
 
     <!-- D3 library -->
     <script src="//d3js.org/d3.v3.min.js"></script>
