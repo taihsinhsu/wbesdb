@@ -5,5 +5,8 @@
 {% endblock %}
 
 {% block main %}
-    <img alt="{{ top }}" class="border" src="http://memegen.link/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?alt=https://i.imgur.com/CsCgN7Ll.png"/>
+    <h1 class="cover-heading" style="color:rgba(255,255,255,.5)">{{ top | urlencode }}</h1>
+    <img src=/static/error.png/ height="70" width="70">
+    <p class="lead"></p>
+    <p class="lead" style="color:rgba(255,255,255,.5)">{{ bottom | urlencode }}</p>
 {% endblock %}

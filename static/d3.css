@@ -1,0 +1,41 @@
+/* D3 style*/
+svg {
+    font: 9px sans-serif;
+}
+
+.background path {
+    fill: none;
+    stroke: #828282;
+    shape-rendering: crispEdges;
+}
+
+.foreground path {
+    fill: none;
+    stroke: #ffcc00;
+}
+
+.brush .extent {
+    fill-opacity: .3;
+    stroke: #fff;
+    shape-rendering: crispEdges;
+}
+
+.axis line, .axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    cursor: move;
+}
+
+.axis--x path {
+    display: none;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}

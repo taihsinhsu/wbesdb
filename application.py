@@ -101,6 +101,12 @@ def account():
         return render_template("account.html")
 
 
+@app.route("/home", methods=["GET"])
+def home():
+    """Register user"""
+    return render_template("home.html")
+
+
 @app.route("/submit", methods=["GET", "POST"])
 @login_required
 def submit():

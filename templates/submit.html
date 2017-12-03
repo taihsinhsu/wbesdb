@@ -13,32 +13,46 @@
             <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Shares" type="number"/>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Building Shape" type="number"/>
+            <select class="form-control" name="Building Shape">
+                <option disabled selected value>Building Shape</option>
+                <option value=Square>Square</option>
+                <option value=Rectangle>Rectangle</option>
+                <option value=Circle>Circle</option>
+                <option value=U-Shape>U-Shape</option>
+                <option value=T-Shape>T-Shape</option>
+                <option value=Others>Others</option>
+            </select>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Building Orientation" type="number"/>
+            <select class="form-control" name="Building Orientation">
+                <option disabled selected value>Building Orientation</option>
+                <option value=N-S>N-S</option>
+                <option value=E-W>E-W</option>
+                <option value=NE-SW>NE-SW</option>
+                <option value=NW-SE>NW-SE</option>
+            </select>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Window Wall Ratio" type="number"/>
+            <input autocomplete="off" autofocus class="form-control" min="0" name="Window Wall Ratio" placeholder="Window Wall Ratio" type="number"/>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Shading" type="number"/>
+            <input autocomplete="off" autofocus class="form-control" min="0" name="Shading" placeholder="Shading" type="number"/>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Glass Type" type="number"/>
+            <input autocomplete="off" autofocus class="form-control" min="0" name="Glass Type" placeholder="Glass Type" type="number"/>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Wall Insulation" type="number"/>
+            <input autocomplete="off" autofocus class="form-control" min="0" name="Wall Insulation" placeholder="Wall Insulation" type="number"/>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Cooling Load" type="number"/>
+            <input autocomplete="off" autofocus class="form-control" min="0" name="Cooling Load" placeholder="Cooling Load" type="number"/>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Heating Load" type="number"/>
+            <input autocomplete="off" autofocus class="form-control" min="0" name="Heating Load" placeholder="Heating Load" type="number"/>
         </div>
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Lighting Load" type="number"/>
+            <input autocomplete="off" autofocus class="form-control" min="0" name="Lighting Load" placeholder="Lighting Load" type="number"/>
         </div>
-        <button class="btn btn-primary" type="submit">Submit</button>
+        <button class="btn btn-outline-secondary" type="submit">Submit</button>
     </form>
 {% endblock %}
