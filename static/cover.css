@@ -52,6 +52,10 @@ body {
   margin-right: auto;
   margin-left: auto;
 }
+.form-container {
+  margin-right: 35%;
+  margin-left: 35%;
+}
 
 /* Padding for spacing */
 .inner {

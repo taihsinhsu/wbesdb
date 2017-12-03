@@ -37,10 +37,10 @@
                             </h3>
                             <nav class="nav nav-masthead">
                                {% if session.user_id %}
+                                    <a class="nav-link active" href="/home">Home</a>
                                     <a class="nav-link" href="/explore">Explore</a>
                                     <a class="nav-link" href="/submit">Submit</a>
                                     <a class="nav-link" href="/download">Download</a>
-                                    <a class="nav-link" href="/account">Account</a>
                                     <a class="nav-link" href="/logout">Log Out</a>
                                {% else %}
                                     <a class="nav-link active" href="/home">Home</a>
