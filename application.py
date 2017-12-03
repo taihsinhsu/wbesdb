@@ -81,24 +81,70 @@ def submit():
 
         user_id = session.get("user_id")
 
-        symbol = request.form.get("symbol")
-        shares = request.form.get("shares")
+        orientation = request.form.get("orientation")
+        WWR = request.form.get("WWR")
+        NS_h_shading = request.form.get("NS-h-shading")
+        WE_h_shading = request.form.get("WE-h-shading")
+        WE_v_shading = request.form.get("WE-v-shading")
+        wall_u = request.form.get("wall-u")
+        glass_u = request.form.get("glass-u")
+        glass_shgc = request.form.get("glass-shgc")
+        cooling = request.form.get("cooling")
+        heating = request.form.get("heating")
+        lighting = request.form.get("lighting")
+        DHW = request.form.get("DHW")
+        plugload = request.form.get("plugload")
+        total = request.form.get("total")
 
-        # ensure symbol not blank
-        if not symbol:
-            return apology("missing symbol", 400)
+        # ensure form not blank
+        if not orientation:
+            return apology("missing building orientation", 400)
+        if not WWR:
+            return apology("missing window to wall ratio", 400)
+        if not NS_h_shading:
+            return apology("missing NS horizontal shading", 400)
+        if not WE_h_shading:
+            return apology("missing WE horizontal shading", 400)
+        if not WE_v_shading:
+            return apology("missing WE verical shading ", 400)
+        if not wall_u:
+            return apology("missing wall: u-value", 400)
+        if not glass_u:
+            return apology("missing glass: u-value", 400)
+        if not glass_shgc:
+            return apology("missing glass: SHGC", 400)
+        if not cooling:
+            return apology("missing cooling", 400)
+        if not heating:
+            return apology("missing heating", 400)
+        if not lighting:
+            return apology("missing lighting", 400)
+        if not DHW:
+            return apology("missing DHW", 400)
+        if not plugload:
+            return apology("missing plugload", 400)
+        if not total:
+            return apology("missing total EUI", 400)
 
-        # ensure shares not blank
-        if not shares:
-            return apology("missing shares", 400)
+        # ensure values is an integer
+        orientation = int(orientation)
+        WWR = int(WWR)
+        NS_h_shading = int(NS_h_shading)
+        WE_h_shadingn = int(WE_h_shading)
+        WE_v_shading = int(WE_v_shading)
+        wall_u = int(wall_u)
+        glass_u = int(glass_u)
+        glass_shgc = int(glass_shgc)
+        cooling = int(cooling)
+        heating = int(heating)
+        lighting = int(lighting)
+        DHW = int(DHW)
+        plugload = int(plugload)
+        total = int(total)
 
-        # ensure shares is an integer
-        try:
-            shares = int(shares)
-            if shares < 0:
-                return apology("invalid shares", 400)
-        except:
-            return apology("invalid shares", 400)
+        if orientation < 0 && WWR < 0 && NS_h_shading < 0 && WE_h_shading < 0 && WE_v_shading < 0 && wall_u < 0
+                        & glass_u < 0 && glass_shgc < 0 && cooling < 0 && heating < 0 cooling < 0 && heating < 0 && lighting < 0 && DHW < 0 && DHW < 0 && plugload < 0 && total < 0:
+            return apology("invalid values", 400)
 
         # Query database for cash user has
         rows = db.execute("SELECT * FROM users WHERE id = :id", id=user_id)
