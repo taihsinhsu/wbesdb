@@ -36,9 +36,6 @@ db = SQL("postgres://zfqpzaclrzlqws:9664716ffbdcaf0c5ee9faced7f00e7bc1309cd8b6c8
 @login_required
 def index():
     """Show portfolio of stocks"""
-
-
-
     return render_template("index.html")
 
 
@@ -237,12 +234,7 @@ def register():
 @login_required
 def download():
     """Download CSV file"""
-    if request.method == "POST":
-    # get data from database
-        rows = db.execute("SELECT * FROM energy OUTPUT TO cars.csv FORMAT TEXT")
-
-    else:
-        return render_template("download.html")
+    return render_template("download.html")
 
 
 def errorhandler(e):
