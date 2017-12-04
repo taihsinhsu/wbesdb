@@ -6,8 +6,8 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from helpers import apology, login_required
+import urllib.request
+from functools import wraps
 
 # Configure application
 app = Flask(__name__)
@@ -32,6 +32,35 @@ Session(app)
 db = SQL("postgres://zfqpzaclrzlqws:9664716ffbdcaf0c5ee9faced7f00e7bc1309cd8b6c8f9249fe6f58ba1681f57@ec2-54-163-233-89.compute-1.amazonaws.com:5432/dnh0t4rkjhu7r")
 
 
+def apology(message, code=400):
+    """Renders message as an apology to user."""
+    def escape(s):
+        """
+        Escape special characters.
+
+        https://github.com/jacebrowning/memegen#special-characters
+        """
+        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
+                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
+            s = s.replace(old, new)
+        return s
+    return render_template("apology.html", top=code, bottom=escape(message)), code
+
+
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    http://flask.pocoo.org/docs/0.12/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route("/")
 @login_required
 def index():
@@ -48,13 +77,15 @@ def home():
 @app.route("/submit", methods=["GET", "POST"])
 @login_required
 def submit():
-    """Buy shares of stock"""
+    """get user submitted data"""
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
+        # get user id
         user_id = session.get("user_id")
 
+        # get values from form
         orientation = request.form.get("orientation")
         WWR = request.form.get("WWR")
         NS_h_shading = request.form.get("NS-h-shading")
@@ -158,7 +189,7 @@ def login():
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("invalid username or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
