@@ -18,7 +18,7 @@ history->view all the data
 
 python csv funtion
 
-quoate->x
+quoate->delete(No need)
 buy->submit
 sell->download
 history->explore

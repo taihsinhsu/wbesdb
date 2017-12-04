@@ -6,23 +6,10 @@
 
 {% block main %}
     <div class="cover-container">
+        <h1 class="cover-heading">Download the data.</h1>
+        <p class="lead">To understand the relative impacts of different technologies and operational variables, download your dataset.
         <div class="form-container">
             <form action="/download" method="post">
-                <div class="form-group">
-                    <select class="form-control form-control-sm" name="symbol">
-                        <option disabled selected value>Filter</option>
-                        <option value="shape">building shape</option>
-                        <option value="orientation">building orientation</option>
-                        <option value="WWR">window wall ratio</option>
-                        <option value="shading">shading</option>
-                        <option value="glass-u">glass: u-value</option>
-                        <option value="glass-shgc">glass: solar heat gain coefficient</option>
-                        <option value="wall-u">wall: u-value</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input class="form-control form-control-sm" autocomplete="off" autofocus class="form-control" min="0" name="shares" placeholder="Shares" type="number"/>
-                </div>
                 <button class="btn btn-outline-secondary" type="submit">Download</button>
             </form>
         </div>

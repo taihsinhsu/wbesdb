@@ -1,4 +1,5 @@
 from cs50 import SQL
+import csv
 import psycopg2
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -36,33 +37,9 @@ db = SQL("postgres://zfqpzaclrzlqws:9664716ffbdcaf0c5ee9faced7f00e7bc1309cd8b6c8
 def index():
     """Show portfolio of stocks"""
 
-    user_id = session.get("user_id")
 
-    # Query database for cash user has
-    rows_users = db.execute("SELECT * FROM users WHERE id = :id", id=user_id)
-    cash = rows_users[0]["cash"]
 
-    # Query database for user's portfolio
-    rows = db.execute("SELECT * FROM 'index' WHERE user_id = :user_id", user_id=user_id)
-
-    total_total = cash
-
-    # Update database for user's portfolio
-    for row in rows:
-
-        shares = row["shares"]
-        symbol = row["symbol"]
-
-        # get stock current price from lookup
-        lookup_price = lookup(symbol).get("price")
-        total = lookup_price * shares
-        total_total += total
-
-        # update dictionary price
-        row_update = {"price": usd(lookup_price), "total": usd(total)}
-        row = row.update(row_update)
-
-    return render_template("index.html", rows=rows)
+    return render_template("index.html")
 
 
 @app.route("/home", methods=["GET"])
@@ -94,7 +71,6 @@ def submit():
         lighting = request.form.get("lighting")
         DHW = request.form.get("DHW")
         plugload = request.form.get("plugload")
-        total = request.form.get("total")
 
         # ensure form not blank
         if not orientation:
@@ -123,54 +99,29 @@ def submit():
             return apology("missing DHW", 400)
         if not plugload:
             return apology("missing plugload", 400)
-        if not total:
-            return apology("missing total EUI", 400)
 
         # ensure values is an integer
         orientation = int(orientation)
-        WWR = int(WWR)
-        NS_h_shading = int(NS_h_shading)
-        WE_h_shadingn = int(WE_h_shading)
-        WE_v_shading = int(WE_v_shading)
-        wall_u = int(wall_u)
-        glass_u = int(glass_u)
-        glass_shgc = int(glass_shgc)
-        cooling = int(cooling)
-        heating = int(heating)
-        lighting = int(lighting)
-        DHW = int(DHW)
-        plugload = int(plugload)
-        total = int(total)
+        WWR = float(WWR)
+        NS_h_shading = float(NS_h_shading)
+        WE_h_shading = float(WE_h_shading)
+        WE_v_shading = float(WE_v_shading)
+        wall_u = float(wall_u)
+        glass_u = float(glass_u)
+        glass_shgc = float(glass_shgc)
+        cooling = float(cooling)
+        heating = float(heating)
+        lighting = float(lighting)
+        DHW = float(DHW)
+        plugload = float(plugload)
+        total = cooling+heating+lighting+DHW+plugload
 
-        if orientation < 0 && WWR < 0 && NS_h_shading < 0 && WE_h_shading < 0 && WE_v_shading < 0 && wall_u < 0
-                        & glass_u < 0 && glass_shgc < 0 && cooling < 0 && heating < 0 cooling < 0 && heating < 0 && lighting < 0 && DHW < 0 && DHW < 0 && plugload < 0 && total < 0:
-            return apology("invalid values", 400)
+        # update energy table
+        rows = db.execute("INSERT INTO energy (user_id, orientation, WWR, NS_h_shading, WE_h_shading, WE_v_shading, wall_u, glass_u, glass_shgc, cooling, heating, lighting, DHW, plugload, total) VALUES(:user_id, :orientation, :WWR, :NS_h_shading, :WE_h_shading, :WE_v_shading, :wall_u, :glass_u, :glass_shgc, :cooling, :heating, :lighting, :DHW, :plugload, :total)",
+                                user_id=user_id, orientation=orientation, WWR=WWR, NS_h_shading=NS_h_shading, WE_h_shading=WE_h_shading, WE_v_shading=WE_v_shading, wall_u=wall_u, glass_u=glass_u, glass_shgc=glass_shgc, cooling=cooling, heating=heating, lighting=lighting, DHW=DHW, plugload=plugload, total=total)
 
-        # Query database for cash user has
-        rows = db.execute("SELECT * FROM users WHERE id = :id", id=user_id)
-        cash = float(rows[0]["cash"])
-
-        # update user table
-        new_cash = str(balance)
-        rows_users = db.execute(
-            "UPDATE users SET cash = :cash WHERE id = :id", id=user_id, cash=new_cash)
-
-        # update history table
-        rows_history = db.execute("INSERT INTO history (user_id, symbol, name, shares, price) VALUES(:user_id, :symbol, :name, :shares, :price)",
-                                  user_id=user_id, symbol=symbol, name=name, shares=shares, price=usd(lookup_price))
-
-        # update index table
-        rows_index = db.execute("INSERT INTO 'index' (user_id, symbol, name, shares) VALUES(:user_id, :symbol, :name, :shares)",
-                                user_id=user_id, symbol=symbol, name=name, shares=shares)
-        if not rows_index:
-            rows_index = db.execute(
-                "SELECT * FROM 'index' WHERE user_id = :user_id AND name = :name", user_id=user_id, name=lookup_name)
-            shares_owned = int(rows_index[0]["shares"])
-            rows_index_new = db.execute("UPDATE 'index' SET shares = :shares WHERE user_id = :user_id",
-                                        user_id=user_id, shares=shares_owned + shares)
 
         # successful transaction
-        flash("Bought!")
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -183,11 +134,7 @@ def submit():
 def explore():
     """Show history of transactions"""
 
-    # Query database for user transaction history
-    rows = db.execute("SELECT * FROM history WHERE user_id = :user_id",
-                      user_id=session.get("user_id"))
-
-    return render_template("explore.html", transactions=rows)
+    return render_template("explore.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -289,78 +236,13 @@ def register():
 @app.route("/download", methods=["GET", "POST"])
 @login_required
 def download():
-    """Sell shares of stock"""
-
-    user_id = session.get("user_id")
-
-    # User reached route via POST (as by submitting a form via POST)
+    """Download CSV file"""
     if request.method == "POST":
+    # get data from database
+        rows = db.execute("SELECT * FROM energy OUTPUT TO cars.csv FORMAT TEXT")
 
-        symbol = request.form.get("symbol")
-        shares = request.form.get("shares")
-
-        # ensure symbol not blank
-        if not symbol:
-            return apology("missing symbol", 400)
-
-        # ensure shares not blank
-        if not shares:
-            return apology("missing shares", 400)
-
-        # ensure shares is an integer
-        try:
-            shares = int(shares)
-            if shares < 0:
-                return apology("invalid shares", 400)
-        except:
-            return apology("invalid shares", 400)
-
-        # get stock values from lookup
-        lookup_symbol = lookup(symbol).get("symbol")
-        lookup_name = lookup(symbol).get("name")
-        lookup_price = float(lookup(symbol).get("price"))
-
-        # get shares user owned
-        rows_index = db.execute(
-            "SELECT * FROM 'index' WHERE user_id = :user_id AND name = :name", user_id=user_id, name=lookup_name)
-        shares_owned = int(rows_index[0]["shares"])
-
-        # ensure selling within user's shares
-        if (shares_owned - shares) < 0:
-            return apology("too many shares", 400)
-
-        # proceed transaction
-        else:
-
-            # Query database for current cash user has
-            rows = db.execute("SELECT * FROM users WHERE id = :id", id=user_id)
-            cash = float(rows[0]["cash"])
-
-            # update user table
-            new_cash = round(cash + lookup_price * shares, 2)
-            rows_users = db.execute(
-                "UPDATE users SET cash = :cash WHERE id = :id", id=user_id, cash=new_cash)
-
-            # update history table
-            rows_history = db.execute("INSERT INTO history (user_id, symbol, name, shares, price) VALUES(:user_id, :symbol, :name, :shares, :price)",
-                                      user_id=user_id, symbol=lookup_symbol, name=lookup_name, shares=-shares, price=usd(lookup_price))
-
-            # update index table
-            if (shares_owned - shares) == 0:
-                rows_index = db.execute(
-                    "DELETE FROM 'index' WHERE user_id = :user_id AND name = :name", user_id=user_id, name=lookup_name)
-            else:
-                rows_index = db.execute("UPDATE 'index' SET shares = :shares WHERE user_id = :user_id",
-                                        user_id=user_id, shares=shares_owned - shares)
-
-        # successful transaction
-        flash("Sold!")
-        return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
     else:
-        rows = db.execute("SELECT symbol FROM 'index' WHERE user_id = :user_id", user_id=user_id)
-        return render_template("download.html", symbols=rows)
+        return render_template("download.html")
 
 
 def errorhandler(e):
