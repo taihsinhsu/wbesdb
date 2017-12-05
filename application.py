@@ -149,6 +149,7 @@ def submit():
                                 user_id=user_id, orientation=orientation, WWR=WWR, NS_h_shading=NS_h_shading, WE_h_shading=WE_h_shading, WE_v_shading=WE_v_shading, wall_u=wall_u, glass_u=glass_u, glass_shgc=glass_shgc, cooling=cooling, heating=heating, lighting=lighting, DHW=DHW, plugload=plugload, total=total)
 
 
+
         # successful transaction
         return redirect("/")
 
