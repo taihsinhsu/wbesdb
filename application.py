@@ -30,7 +30,7 @@ Session(app)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("postgres://zfqpzaclrzlqws:9664716ffbdcaf0c5ee9faced7f00e7bc1309cd8b6c8f9249fe6f58ba1681f57@ec2-54-163-233-89.compute-1.amazonaws.com:5432/dnh0t4rkjhu7r")
-
+# db = SQL("sqlite:///finance.db")
 
 def apology(message, code=400):
     """Renders message as an apology to user."""
@@ -142,11 +142,11 @@ def submit():
         lighting = float(lighting)
         DHW = float(DHW)
         plugload = float(plugload)
-        total = cooling+heating+lighting+DHW+plugload
+        totals = cooling+heating+lighting+DHW+plugload
 
         # update energy table
         rows = db.execute("INSERT INTO energy (user_id, orientation, WWR, NS_h_shading, WE_h_shading, WE_v_shading, wall_u, glass_u, glass_shgc, cooling, heating, lighting, DHW, plugload, total) VALUES(:user_id, :orientation, :WWR, :NS_h_shading, :WE_h_shading, :WE_v_shading, :wall_u, :glass_u, :glass_shgc, :cooling, :heating, :lighting, :DHW, :plugload, :total)",
-                                user_id=user_id, orientation=orientation, WWR=WWR, NS_h_shading=NS_h_shading, WE_h_shading=WE_h_shading, WE_v_shading=WE_v_shading, wall_u=wall_u, glass_u=glass_u, glass_shgc=glass_shgc, cooling=cooling, heating=heating, lighting=lighting, DHW=DHW, plugload=plugload, total=total)
+                                user_id=session.get("user_id"), orientation=request.form.get("orientation"), WWR=request.form.get("WWR"), NS_h_shading=request.form.get("NS-h-shading"), WE_h_shading=request.form.get("WE-h-shading"), WE_v_shading=request.form.get("WE-v-shading"), wall_u=request.form.get("wall-u"), glass_u=request.form.get("glass-u"), glass_shgc=request.form.get("glass-shgc"), cooling=request.form.get("cooling"), heating=request.form.get("heating"), lighting=request.form.get("lighting"), DHW=request.form.get("DHW"), plugload=request.form.get("plugload"), total=totals)
 
 
 
@@ -220,44 +220,33 @@ def register():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
+        # get the username
         username = request.form.get("username")
-        password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
-
-        # ensure username not blank
         if not username:
-            return apology("missing username", 400)
+            return apology("Missing username")
+        # get password and confirmation
+        password = request.form.get("password")
+        if not password:
+            return apology("Missing password")
 
-        # ensure password not blank
-        elif not password:
-            return apology("missing password", 400)
+        confirmation = request.form.get("confirmation")
+        if password != confirmation:
+            return apology("Password doesn't match")
 
-        # ensure passwords match
-        elif not password == confirmation:
-            return apology("passwords don't match", 400)
+        # encrypt password
+        hashp = generate_password_hash(password)
 
-        # hash password
-        hash = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
-
-        # add new user to database
-        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",
-                            username=username, hash=hash)
-
-        # ensure username not exist
+        # insert user into users, check username is unique
+        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",\
+                                username=request.form.get("username"), hash=hashp)
         if not result:
-            return apology("username taken", 400)
+            return apology("Username already existed")
 
-        # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = :username",
-                          username=username)
+        # store user id
+        # user_id = db.execute("SELECT id FROM users WHERE username IS username", username=request.form.get("username"))  user_id[0]["id"]
+        session["user_id"] = result
+        return redirect(url_for("index"))
 
-        # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
-
-        # Redirect user to home page
-        return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
     else:
         return render_template("register.html")
 
@@ -266,6 +255,7 @@ def register():
 @login_required
 def download():
     """Download CSV file"""
+
     return render_template("download.html")
 
 
