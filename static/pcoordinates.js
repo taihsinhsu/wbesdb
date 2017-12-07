@@ -1,5 +1,5 @@
 var margin = {top: 30, right: 0, bottom: 10, left: 0},
-    width = 1050 - margin.left - margin.right,
+    width = 1100 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal().rangePoints([0, width], 1),
@@ -17,7 +17,7 @@ var svg = d3.select("#svg2")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("static/cars.csv", function(error, cars) {
+d3.csv("static/energy.csv", function(error, cars) {
 
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(cars[0]).filter(function(d) {
