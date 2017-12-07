@@ -82,9 +82,6 @@ def submit():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # get user id
-        user_id = session.get("user_id")
-
         # get values from form
         orientation = request.form.get("orientation")
         WWR = request.form.get("WWR")
@@ -142,13 +139,20 @@ def submit():
         lighting = float(lighting)
         DHW = float(DHW)
         plugload = float(plugload)
-        totals = cooling+heating+lighting+DHW+plugload
+        totals = cooling + heating + lighting + DHW + plugload
 
         # update energy table
-        rows = db.execute("INSERT INTO energy (user_id, orientation, WWR, NS_h_shading, WE_h_shading, WE_v_shading, wall_u, glass_u, glass_shgc, cooling, heating, lighting, DHW, plugload, total) VALUES(:user_id, :orientation, :WWR, :NS_h_shading, :WE_h_shading, :WE_v_shading, :wall_u, :glass_u, :glass_shgc, :cooling, :heating, :lighting, :DHW, :plugload, :total)",
-                                user_id=session.get("user_id"), orientation=request.form.get("orientation"), WWR=request.form.get("WWR"), NS_h_shading=request.form.get("NS-h-shading"), WE_h_shading=request.form.get("WE-h-shading"), WE_v_shading=request.form.get("WE-v-shading"), wall_u=request.form.get("wall-u"), glass_u=request.form.get("glass-u"), glass_shgc=request.form.get("glass-shgc"), cooling=request.form.get("cooling"), heating=request.form.get("heating"), lighting=request.form.get("lighting"), DHW=request.form.get("DHW"), plugload=request.form.get("plugload"), total=totals)
+        db.execute("""INSERT INTO energy (user_id, orientation, WWR, NS_h_shading, WE_h_shading, WE_v_shading, wall_u, glass_u, glass_shgc, cooling, heating, lighting, DHW, plugload, total) VALUES(:user_id, :orientation, :WWR, :NS_h_shading, :WE_h_shading, :WE_v_shading, :wall_u, :glass_u, :glass_shgc, :cooling, :heating, :lighting, :DHW, :plugload, :total)""",
+                        user_id=session["user_id"], orientation=request.form.get("orientation"), WWR=request.form.get("WWR"), NS_h_shading=request.form.get("NS-h-shading"), WE_h_shading=request.form.get("WE-h-shading"), WE_v_shading=request.form.get("WE-v-shading"), wall_u=request.form.get("wall-u"), glass_u=request.form.get("glass-u"),
+                        glass_shgc=request.form.get("glass-shgc"), cooling=request.form.get("cooling"), heating=request.form.get("heating"), lighting=request.form.get("lighting"), DHW=request.form.get("DHW"), plugload=request.form.get("plugload"), total=totals)
+
+        # get user id
+        # session["user_id"] = id
 
         # successful transaction
+
+        # Display portfolio
+        flash("Submitted!")
         return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
@@ -215,36 +219,33 @@ def logout():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    # User reached route via POST (as by submitting a form via POST)
+
+    # POST
     if request.method == "POST":
 
-        # get the username
-        username = request.form.get("username")
-        if not username:
-            return apology("Missing username")
-        # get password and confirmation
-        password = request.form.get("password")
-        if not password:
-            return apology("Missing password")
+        # Validate form submission
+        if not request.form.get("username"):
+            return apology("missing username")
+        elif not request.form.get("password"):
+            return apology("missing password")
+        elif request.form.get("password") != request.form.get("confirmation"):
+            return apology("passwords don't match")
 
-        confirmation = request.form.get("confirmation")
-        if password != confirmation:
-            return apology("Password doesn't match")
+        # Add user to database
+        id = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",
+                        username=request.form.get("username"),
+                        hash=generate_password_hash(request.form.get("password")))
+        if not id:
+            return apology("username taken")
 
-        # encrypt password
-        hashp = generate_password_hash(password)
+        # Log user in
+        session["user_id"] = id
 
-        # insert user into users, check username is unique
-        result = db.execute("INSERT INTO users (username, hash) VALUES(:username, :hash)",\
-                                username=request.form.get("username"), hash=hashp)
-        if not result:
-            return apology("Username already existed")
+        # Let user know they're registered
+        flash("Registered!")
+        return redirect("/")
 
-        # store user id
-        # user_id = db.execute("SELECT id FROM users WHERE username IS username", username=request.form.get("username"))  user_id[0]["id"]
-        session["user_id"] = result
-        return redirect(url_for("index"))
-
+    # GET
     else:
         return render_template("register.html")
 
@@ -253,9 +254,14 @@ def register():
 @login_required
 def download():
     """Download CSV file"""
+    if request.method == "POST":
+        url = f"http://thsu-thsu.cs50.io:8080/static/cars.csv"
+        webpage=urllib.request.urlopen(url)
+        return webpage.read()
 
 
-    return render_template("download.html")
+    else:
+        return render_template("download.html")
 
 
 def errorhandler(e):
