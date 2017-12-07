@@ -1,0 +1,4 @@
+- heroku server
+- python app
+- javascript d3 framework
+-

@@ -1,0 +1,177 @@
+{
+    "name": "building",
+    "children":
+    [
+        {
+         "name": "history",
+         "children": [
+                {"name": "rating program"},
+                {"name": "climate"},
+                {"name": "building precedents"}
+            ]
+        },
+        {
+        "name": "benchmarks",
+        "children": [
+                {"name": "code"},
+                {"name": "precedent"}
+            ]
+        },
+        {
+         "name": "wind",
+         "children": [
+                {"name": "outdoor cfd"},
+                {"name": "indoor cfd"}
+            ]
+        },
+        {
+         "name": "energy",
+         "children": [
+                {
+                    "name": "intervention",
+                    "children": [
+                            {
+                                "name": "east-west",
+                                "children": [
+                                        {"name": "window wall ratio"},
+                                        {"name": "horizontal shading"},
+                                        {"name": "vertical shading"},
+                                        {"name": "wall insulation"},
+                                        {"name": "glass insulation"},
+                                        {"name": "glass shgc"},
+                                        {"name": "natural ventilation"},
+                                        {"name": "dew point temperature"},
+                                        {"name": "relative humidity"}
+                                    ]
+                            },
+                            {
+                                "name": "north-south",
+                                "children": [
+                                        {"name": "window wall ratio"},
+                                        {"name": "horizontal shading"},
+                                        {"name": "vertical shading"},
+                                        {"name": "wall insulation"},
+                                        {"name": "glass insulation"},
+                                        {"name": "glass shgc"},
+                                        {"name": "natural ventilation"},
+                                        {"name": "dew point temperature"},
+                                        {"name": "relative humidity"}
+                                    ]
+                            }
+                        ]
+                },
+                {
+                    "name": "proposal",
+                    "children": [
+                        {
+                            "name": "east-west",
+                            "children": [
+                                    {"name": "optimal"},
+                                    {"name": "moderate"}
+                                ]
+                        },
+                        {
+                            "name": "north-south",
+                            "children": [
+                                    {"name": "optimal"},
+                                    {"name": "moderate"}
+                                ]
+                        }
+                        ]
+                }
+            ]
+        },
+        {
+         "name": "embodied energy",
+         "children": [
+                {"name": "concrete block"},
+                {"name": "aluminum"},
+                {"name": "ballast"},
+                {"name": "concrete"},
+                {"name": "glass"},
+                {"name": "mortar"},
+                {"name": "rebar rod light sections"},
+                {"name": "roofing asphalt"}
+            ]
+        },
+        {
+         "name": "water",
+         "children": [
+                {
+                    "name": "context",
+                    "children": [
+                            {"name": "management"},
+                            {"name": "regional challenges"},
+                            {"name": "ballast"},
+                            {"name": "flooding"},
+                            {"name": "soils and geology"}
+                        ]
+                },
+                {
+                    "name": "strategies",
+                    "children": [
+                            {"name": "rainwater collection"},
+                            {"name": "rainwater storage"},
+                            {"name": "rainwater treatment"},
+                            {"name": "operations and use"},
+                            {"name": "water supply and demand"},
+                            {"name": "flooding"},
+                            {"name": "recycling greywater"}
+                        ]
+                },
+                {"name": "framework"}
+            ]
+        },
+        {
+         "name": "renewable energy",
+         "children": [
+                {"name": "photovoltaic"},
+                {"name": "solar thermal"}
+            ]
+        },
+        {
+         "name": "air pollution",
+         "children": [
+                {"name": "traffic"},
+                {"name": "roadside vegetation barrier"},
+                {"name": "adjacent building barrier"}
+            ]
+        },
+        {
+         "name": "hvac",
+         "children": [
+                {"name": "liquid desiccant dedicated outdoor air system"},
+                {"name": "variable refrigerant flow system"}
+            ]
+        },
+        {
+         "name": "daylight",
+         "children": [
+                {
+                    "name": "outdoor",
+                    "children": [
+                            {"name": "solar radiation"},
+                            {"name": "direct daylight hours"},
+                            {"name": "shadow analysis"}
+                        ]
+                },
+                {
+                    "name": "indoor",
+                    "children": [
+                            {"name": "spatial daylight autonomy"},
+                            {"name": "continuous daylight autonomy"}
+                        ]
+                }
+            ]
+        },
+        {
+         "name": "technologies",
+         "children": [
+                {"name": "intelligent sensors and smart buildings"},
+                {"name": "energy efficient fans"},
+                {"name": "smart thermostats"},
+                {"name": "load disaggregation and consumption feedback"}
+            ]
+        }
+    ]
+}

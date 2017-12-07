@@ -1,17 +1,22 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Explore
+    Energy
 {% endblock %}
 
 {% block main %}
     <svg id="svg2"></svg>
-        <h1 class="cover-heading">Energy simulation.</h1>
+        <div class="cover-container">
+        <p class="lead"></p>
+        <h1 class="cover-heading">Zero.</h1>
         <p class="lead">The use of a physics-based software to predict the energy use of a building.</p>
+        <p class="lead">
+        </p>
+    </div>
     <!-- D3 library -->
     <script src="//d3js.org/d3.v3.min.js"></script>
 
     <!-- local D3 script -->
-    <script src="/static/pcoordinates.js"></script>
+    <script src="/static/js/pcoordinates.js"></script>
 
 {% endblock %}

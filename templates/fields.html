@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Fields
+{% endblock %}
+
+{% block main %}
+
+    <svg id="svg1"></svg>
+    <div class="cover-container">
+        <h1 class="cover-heading">Zero.</h1>
+        <p>The research investigated energy-related and non-energy-related environmental considerations including daylight, natural ventilation, water, air quality, noise, the embodied energy of construction materials, HVAC, and other available technologies.</p>
+        <p class="lead">
+            <a href="/energy" class="btn btn-lg btn-secondary">Learn more</a>
+        </p>
+    </div>
+
+    <!-- D3 library -->
+    <script src="//d3js.org/d3.v3.min.js"></script>
+
+    <!-- local D3 script -->
+    <script src="/static/js/tree.js"></script>
+
+{% endblock %}

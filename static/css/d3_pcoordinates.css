@@ -1,17 +1,17 @@
 /* D3 style*/
 svg {
-    font: 12px sans-serif;
+    font: 10px sans-serif;
 }
 
 .background path {
     fill: none;
-    stroke: #828282;
+    stroke: #333;
     shape-rendering: crispEdges;
 }
 
 .foreground path {
     fill: none;
-    stroke: #ffcc00;
+    stroke: #4682b4;
 }
 
 .brush .extent {
@@ -22,13 +22,13 @@ svg {
 
 .axis line, .axis path {
     fill: none;
-    stroke: #000;
+    stroke: #606060;
     shape-rendering: crispEdges;
 }
 
 .axis text {
     cursor: move;
-    stroke: #c4c5c6;
+    fill: #fff;
 }
 
 .axis--x path {
@@ -37,6 +37,6 @@ svg {
 
 .line {
     fill: none;
-    stroke: #ffcc00;
+    stroke: #333;
     stroke-width: 1.5px;
 }

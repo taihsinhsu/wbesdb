@@ -41,22 +41,22 @@ def apology(message, code=400):
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
 
-@app.route("/")
-def index():
+@app.route("/fields")
+def fields():
     """Show portfolio of stocks"""
-    return render_template("index.html")
+    return render_template("fields.html")
 
 
-@app.route("/home", methods=["GET"])
-def home():
+@app.route("/building", methods=["GET"])
+def building():
     """Register user"""
-    return render_template("home.html")
+    return render_template("building.html")
 
 
-@app.route("/location")
-def location():
+@app.route("/climate")
+def climate():
     """Show history of transactions"""
-    return render_template("location.html")
+    return render_template("climate.html")
 
 
 @app.route("/energy")
