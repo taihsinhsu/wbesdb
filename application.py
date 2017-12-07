@@ -256,8 +256,8 @@ def download():
     """Download CSV file"""
     if request.method == "POST":
         url = f"http://thsu-thsu.cs50.io:8080/static/cars.csv"
-        webpage=urllib.request.urlopen(url)
-        return webpage.read()
+        return urllib.request.urlretrieve(url, "cars.csv")
+
 
 
     else:
