@@ -148,8 +148,6 @@ def submit():
         rows = db.execute("INSERT INTO energy (user_id, orientation, WWR, NS_h_shading, WE_h_shading, WE_v_shading, wall_u, glass_u, glass_shgc, cooling, heating, lighting, DHW, plugload, total) VALUES(:user_id, :orientation, :WWR, :NS_h_shading, :WE_h_shading, :WE_v_shading, :wall_u, :glass_u, :glass_shgc, :cooling, :heating, :lighting, :DHW, :plugload, :total)",
                                 user_id=session.get("user_id"), orientation=request.form.get("orientation"), WWR=request.form.get("WWR"), NS_h_shading=request.form.get("NS-h-shading"), WE_h_shading=request.form.get("WE-h-shading"), WE_v_shading=request.form.get("WE-v-shading"), wall_u=request.form.get("wall-u"), glass_u=request.form.get("glass-u"), glass_shgc=request.form.get("glass-shgc"), cooling=request.form.get("cooling"), heating=request.form.get("heating"), lighting=request.form.get("lighting"), DHW=request.form.get("DHW"), plugload=request.form.get("plugload"), total=totals)
 
-
-
         # successful transaction
         return redirect("/")
 
@@ -255,6 +253,7 @@ def register():
 @login_required
 def download():
     """Download CSV file"""
+
 
     return render_template("download.html")
 
