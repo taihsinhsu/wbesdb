@@ -47,10 +47,10 @@ def fields():
     return render_template("fields.html")
 
 
-@app.route("/building", methods=["GET"])
-def building():
+@app.route("/", methods=["GET"])
+def Index():
     """Register user"""
-    return render_template("building.html")
+    return render_template("Index.html")
 
 
 @app.route("/climate")
