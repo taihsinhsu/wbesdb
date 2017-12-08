@@ -65,10 +65,10 @@ def energy():
     return render_template("energy.html")
 
 
-@app.route("/solar", methods=["GET", "POST"])
-def solar():
+@app.route("/daylight", methods=["GET", "POST"])
+def daylight():
     """get user submitted data"""
-    return render_template("solar.html")
+    return render_template("daylight.html")
 
 
 def errorhandler(e):
