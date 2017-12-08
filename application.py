@@ -41,10 +41,10 @@ def apology(message, code=400):
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
 
-@app.route("/fields")
-def fields():
+@app.route("/branches")
+def branches():
     """Show portfolio of stocks"""
-    return render_template("fields.html")
+    return render_template("branches.html")
 
 
 @app.route("/", methods=["GET"])
